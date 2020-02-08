@@ -1,0 +1,163 @@
+.list-view:focused {
+    -fx-background-color : transparent;
+    -fx-background-insets : 0.0;
+    -fx-background-radius : 0.0;
+}
+
+
+.list-view {
+    -fx-background-insets : 0.0;
+    -fx-padding: 1.0;
+}
+
+.list-view  .list-cell:focused {
+    -fx-background-color: #d9ecff !important;
+}
+
+
+.list-view > .virtual-flow > .clipped-container > .sheet > .list-cell {
+    -fx-padding: 1.0em 2.0em 1.0em 2.0em;
+    -fx-font-family: Roboto ;
+    -fx-text-fill : #6b6b6b !important;
+    -fx-font-size: 16.0px !important;
+    -fx-font-weight : bold !important;
+}
+
+
+.list-view > .virtual-flow > .clipped-container > .sheet > .list-cell {
+    -fx-background-color: white;
+    -fx-text-fill : #6b6b6b !important;
+    -fx-font-size: 16.0px !important;
+    -fx-font-weight : bold !important;
+}
+
+.list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:hover {
+    -fx-background-color: -light-gray;
+    -fx-text-fill : #6b6b6b !important;
+    -fx-font-size: 16.0px !important;
+    -fx-font-weight : bold !important;
+}
+
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell {
+    -fx-background-color : white;
+    -fx-text-fill : #6b6b6b !important;
+    -fx-font-size: 16.0px !important;
+    -fx-font-weight : bold !important;
+}
+
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:focused {
+    -fx-background-color : transparent;
+    -fx-background-insets: 0.0;
+    -fx-text-fill : #6b6b6b !important;
+    -fx-font-size: 16.0px !important;
+    -fx-font-weight : bold !important;
+}
+
+.list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:selected {
+    -fx-text-fill : #6b6b6b !important;
+    -fx-font-size: 16.0px !important;
+    -fx-font-weight : bold !important;
+}
+
+.list-view:focused .virtual-flow .scroll-bar:vertical {
+  -fx-border-color :  transparent transparent transparent transparent;
+  -fx-text-fill : #6b6b6b !important;
+    -fx-font-size: 16.0px !important;
+    -fx-font-weight : bold !important;
+}
+
+
+#productName, #cartProductName{
+	-fx-font-size: 16.0px !important;
+	-fx-font-weight : bold !important;
+	-fx-fill: #6b6b6b !important;
+}
+
+#productDesc, #cartProductDesc{
+	-fx-font-size: 14.0px !important;
+	-fx-fill: #797979 !important;
+}
+
+#productPrice, #cartProductPrice{
+	-fx-font-size: 16.0px !important;
+	-fx-font-family : Roboto Bold !important;
+	-fx-font-style : italic !important;
+	-fx-font-weight : bold !important;
+	-fx-fill: #6b6b6b !important;
+}
+
+.cart_title{
+	-fx-font-size: 16.0px !important;
+	-fx-font-weight : bold !important;
+	-fx-fill: #6b6b6b !important;
+}
+
+
+.jfx-snackbar-content {
+    -fx-background-color: #323232;
+    -fx-padding: 5.0;
+    -fx-spacing: 5.0;
+}
+
+.jfx-snackbar-toast {
+    -fx-text-fill: WHITE;
+}
+
+.jfx-snackbar-action {
+    -fx-text-fill: #ff4081;
+}
+
+.tferror {  
+     -fx-text-box-border: red !important;
+     -fx-focus-color: red !important; 
+     -fx-text-fill: red !important; 
+     -fx-border-width: 1.0 1.0 1.0 1.0 !important; 
+     -fx-border-color: red !important; 
+}
+
+.table-cell{
+	-fx-border-width: 0 0 1.0 0 !important; 
+	-fx-border-color: #f5f5f5 !important; 
+	-fx-table-cell-border-color: #f5f5f5 !important; 
+}
+
+
+.border-bottom{
+	-fx-border-width: 0 0 1.0 0 !important; 
+	-fx-border-color: #f5f5f5 !important; 
+}
+
+#productTableView .table-cell,
+#productTableView .table-cell:focused,
+#productTableView .table-cell:selected,
+#productTableView .table-row-cell:filled:selected,
+#productTableView .table-row-cell:filled:pressed,
+#productTableView .table-row-cell:filled:selected:focused {
+    -fx-cell-size: 100px !important;
+    -fx-fixed-cell-size : 100px !important;
+}
+
+#productTableView .table-view {
+	-fx-cell-size: 100px !important;
+  -fx-fixed-cell-size : 100px !important;
+}
+
+#productTableView .table-cell {
+    -fx-cell-size: 100px !important;
+    -fx-fixed-cell-size : 100px !important;
+}
+
+.tree-table-row-cell:filled:selected .table-column:filled,
+.table-view .column-overlay,
+.table-view .column-header-background .column-drag-header,
+.table-view .column-resize-line,
+.tree-view .virtual-flow .clipped-container .sheet .tree-cell:focused:filled{
+	-fx-cell-size: 100px !important;
+	-fx-fixed-cell-size : 100px !important;
+}
+
+
+
+
+
+

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory?>
+<?import java.net.URL?>
+
+<HBox fx:id="hboxCartListCell" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<VBox prefWidth="200.0" spacing="3.0" HBox.hgrow="ALWAYS">
+			<HBox.margin>
+				<Insets />
+			</HBox.margin>
+			<children>
+				<Label fx:id="cartProductName" text="Product Name" textFill="#6b6b6b">
+					<font>
+						<Font name="System Bold" size="13.0" />
+					</font>
+				</Label>
+				<Label fx:id="cartProductDesc" layoutX="10.0" layoutY="10.0" text="Product Description" textFill="#797979">
+					<font>
+						<Font size="13.0" />
+					</font>
+				</Label>
+			</children>
+			<padding>
+				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+			</padding>
+		</VBox>
+		<VBox alignment="TOP_CENTER" spacing="3.0">
+			<children>
+				<Label styleClass="cart_title" text="Quantity" textFill="#6b6b6b">
+					<font>
+						<Font name="System Bold" size="10.0" />
+					</font>
+				</Label>
+				<Spinner fx:id="cartProductQty" editable="true" maxWidth="80.0">
+					<!-- <valueFactory>
+						<SpinnerValueFactory.IntegerSpinnerValueFactory min="1" max="100000000000000" initialValue="1" amountToStepBy="1" />
+					</valueFactory> -->
+				</Spinner>
+			</children>
+			<HBox.margin>
+				<Insets />
+			</HBox.margin>
+			<padding>
+				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+			</padding>
+		</VBox>
+		<VBox alignment="TOP_RIGHT" spacing="3.0" HBox.hgrow="ALWAYS">
+			<children>
+				<Label styleClass="cart_title" text="Unit Price" textFill="#6b6b6b">
+					<font>
+						<Font name="System Bold" size="10.0" />
+					</font>
+				</Label>
+				<Label fx:id="cartProductUnitPrice" text="\$ 12000.00" textFill="#4d4d4d" VBox.vgrow="ALWAYS">
+					<font>
+						<Font name="System Bold Italic" size="13.0" />
+					</font>
+				</Label>
+			</children>
+			<HBox.margin>
+				<Insets />
+			</HBox.margin>
+			<padding>
+				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+			</padding>
+		</VBox>
+		<VBox alignment="TOP_RIGHT" layoutX="274.0" layoutY="10.0" spacing="3.0" HBox.hgrow="ALWAYS">
+			<children>
+				<Label styleClass="cart_title" text="Total Amount" textFill="#6b6b6b">
+					<font>
+						<Font name="System Bold" size="10.0" />
+					</font>
+				</Label>
+				<Label fx:id="cartProductTotAmt" text="\$ 12000.00" textFill="#4d4d4d" VBox.vgrow="ALWAYS">
+					<font>
+						<Font name="System Bold Italic" size="13.0" />
+					</font>
+				</Label>
+			</children>
+			<HBox.margin>
+				<Insets />
+			</HBox.margin>
+			<padding>
+				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+			</padding>
+		</VBox>
+		<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+			<children>
+				<Button fx:id="removeCartItmBtn" mnemonicParsing="false" styleClass="btn-danger" text="Remove" />
+			</children>
+			<padding>
+				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+			</padding>
+		</VBox>
+	</children>
+	<stylesheets>
+		<URL value="@/css/newCss.css" />
+	</stylesheets>
+</HBox>

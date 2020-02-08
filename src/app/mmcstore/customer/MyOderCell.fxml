@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import java.net.URL?>
+
+<HBox fx:id="hboxMyOrderListCell" maxHeight="100.0" prefHeight="80.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<VBox alignment="CENTER_LEFT" spacing="3.0" HBox.hgrow="ALWAYS">
+			<children>
+				<Label fx:id="moCellOrderId" text="Product Name" textFill="#6b6b6b">
+					<font>
+						<Font name="System Bold" size="13.0" />
+					</font>
+				</Label>
+				<Label fx:id="moCellDate" layoutX="10.0" layoutY="10.0" text="Product Description" textFill="#6f6f6f">
+               <font>
+                  <Font size="13.0" />
+               </font></Label>
+				<Label fx:id="moCellOrderAmt" layoutX="10.0" layoutY="27.0" text="\$ 120000.00" textFill="#4d4d4d" VBox.vgrow="ALWAYS">
+					<font>
+						<Font name="System Bold Italic" size="13.0" />
+					</font>
+				</Label>
+			</children>
+			<HBox.margin>
+				<Insets bottom="3.0" left="10.0" top="3.0" />
+			</HBox.margin>
+		</VBox>
+      <VBox alignment="CENTER_RIGHT" spacing="20.0">
+         <HBox.margin>
+            <Insets bottom="3.0" right="10.0" top="3.0" />
+         </HBox.margin>
+         <children>
+            <Label fx:id="myCellStatus" text="Label" />
+            <Button fx:id="moCellViewOrderBtn" mnemonicParsing="false" text="View" />
+         </children>
+      </VBox>
+	</children>
+	<stylesheets>
+		<URL value="@/css/newCss.css" />
+	</stylesheets>
+</HBox>

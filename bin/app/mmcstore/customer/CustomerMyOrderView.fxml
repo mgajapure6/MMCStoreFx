@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXBadge?>
+<?import com.jfoenix.controls.JFXDialog?>
+<?import com.jfoenix.controls.JFXDialogLayout?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.control.Button?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import com.jfoenix.controls.JFXProgressBar?>
+
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+
+<StackPane fx:id="spRoot" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.mmcstore.customer.CustomerMyOrderView">
+	<children>
+		<BorderPane>
+			<center>
+				<VBox fx:id="billListAppenderVbox" VBox.vgrow="ALWAYS" stylesheets="@/css/custom-scroll.css">
+					<children>
+						<HBox alignment="CENTER" spacing="50.0">
+							<children>
+								<VBox alignment="CENTER" prefHeight="155.0" prefWidth="248.0" style="-fx-background-color: white;" styleClass="elevator">
+									<children>
+										<HBox prefHeight="100.0" prefWidth="256.0">
+											<children>
+												<VBox prefHeight="100.0" prefWidth="211.0">
+													<children>
+														<Label fx:id="myOrdersTotalOrders" styleClass="h3" text="540" />
+														<Label layoutX="10.0" layoutY="10.0" styleClass="h5" text="Total Orders" />
+													</children>
+												</VBox>
+												<FontAwesomeIconView glyphName="" size="40" styleClass="text-warning" />
+											</children>
+										</HBox>
+										<JFXProgressBar progress="0.73">
+											<styleClass>
+												<String fx:value="progress-bar-big" />
+												<String fx:value="progress-bar-warning" />
+											</styleClass>
+										</JFXProgressBar>
+									</children>
+									<padding>
+										<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+									</padding>
+								</VBox>
+								<VBox alignment="CENTER" prefHeight="155.0" prefWidth="248.0" style="-fx-background-color: white;" styleClass="elevator">
+									<children>
+										<HBox prefHeight="100.0" prefWidth="256.0">
+											<children>
+												<VBox prefHeight="100.0" prefWidth="211.0">
+													<children>
+														<Label fx:id="myOrderPendingBills" styleClass="h3" text="540" />
+														<Label layoutX="10.0" layoutY="10.0" styleClass="h5" text="Pending Bills" />
+													</children>
+												</VBox>
+												<FontAwesomeIconView glyphName="FILE" size="40" styleClass="text-warning" />
+											</children>
+										</HBox>
+										<JFXProgressBar progress="0.73">
+											<styleClass>
+												<String fx:value="progress-bar-big" />
+												<String fx:value="progress-bar-warning" />
+											</styleClass>
+										</JFXProgressBar>
+									</children>
+									<padding>
+										<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+									</padding>
+								</VBox>
+								<VBox alignment="CENTER" prefHeight="155.0" prefWidth="248.0" style="-fx-background-color: white;" styleClass="elevator">
+									<children>
+										<HBox prefHeight="100.0" prefWidth="256.0">
+											<children>
+												<VBox prefHeight="100.0" prefWidth="211.0">
+													<children>
+														<Label fx:id="myOrderPendingAmt" styleClass="h3" text="540" />
+														<Label layoutX="10.0" layoutY="10.0" styleClass="h5" text="Pending Amount" />
+													</children>
+												</VBox>
+												<FontAwesomeIconView glyphName="INR" size="40" styleClass="text-warning" />
+											</children>
+										</HBox>
+										<JFXProgressBar progress="0.73">
+											<styleClass>
+												<String fx:value="progress-bar-big" />
+												<String fx:value="progress-bar-warning" />
+											</styleClass>
+										</JFXProgressBar>
+									</children>
+									<padding>
+										<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+									</padding>
+								</VBox>
+								<VBox alignment="CENTER" layoutX="626.0" layoutY="30.0" prefHeight="155.0" prefWidth="248.0" style="-fx-background-color: white;" styleClass="elevator">
+									<children>
+										<HBox prefHeight="100.0" prefWidth="256.0">
+											<children>
+												<VBox prefHeight="100.0" prefWidth="211.0">
+													<children>
+														<Label fx:id="myOrderPaidAmt" styleClass="h3" text="540" />
+														<Label layoutX="10.0" layoutY="10.0" styleClass="h5" text="Paid Amount" />
+													</children>
+												</VBox>
+												<FontAwesomeIconView glyphName="INR" size="40" styleClass="text-warning" />
+											</children>
+										</HBox>
+										<JFXProgressBar progress="0.73">
+											<styleClass>
+												<String fx:value="progress-bar-big" />
+												<String fx:value="progress-bar-warning" />
+											</styleClass>
+										</JFXProgressBar>
+									</children>
+									<padding>
+										<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+									</padding>
+								</VBox>
+
+
+
+							</children>
+							<padding>
+								<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+							</padding>
+						</HBox>
+					</children>
+				</VBox>
+			</center>
+			<!-- <left> <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" /> </left> -->
+		</BorderPane>
+
+	</children>
+
+
+
+	<JFXDialog fx:id="alertDialog">
+		<JFXDialogLayout style="-fx-background-color:#fff">
+			<heading>
+				<Label fx:id="alertDialogTitle" prefHeight="38.0" prefWidth="400.0" text="">
+					<styleClass>
+						<String fx:value="h4" />
+						<String fx:value="title" />
+					</styleClass>
+				</Label>
+			</heading>
+			<body>
+				<HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20" alignment="CENTER_RIGHT">
+					<children>
+						<Button fx:id="alertDialogBtn" mnemonicParsing="false" prefHeight="54.0" prefWidth="121.0" styleClass="btn-success" text="Ok">
+							<font>
+								<Font size="14.0" />
+							</font>
+						</Button>
+					</children>
+				</HBox>
+			</body>
+			<actions>
+
+			</actions>
+		</JFXDialogLayout>
+	</JFXDialog>
+
+	<JFXDialog fx:id="myOrderDetailDialog">
+		<JFXDialogLayout style="-fx-background-color:#fff" prefWidth="750.0">
+			<heading>
+				<Label fx:id="myOrderNumberTitle" prefHeight="38.0" prefWidth="700.0" text="Order">
+					<styleClass>
+						<String fx:value="h4" />
+						<String fx:value="title" />
+					</styleClass>
+				</Label>
+			</heading>
+			<body>
+				<BorderPane fx:id="myOrderDetailListAppenderBorderPane" prefWidth="750.0" stylesheets="@/css/custom-scroll.css">
+					<center>
+						<!-- <ScrollPane fx:id="cartListAppenderScrollPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"> <content> <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" /> </content> </ScrollPane> -->
+					</center>
+					<bottom>
+						<HBox alignment="CENTER" spacing="20.0">
+							<children>
+								<VBox>
+									<children>
+										<GridPane>
+											<columnConstraints>
+												<ColumnConstraints hgrow="SOMETIMES" minWidth="150.0" />
+												<ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="100.0" />
+											</columnConstraints>
+											<!-- <rowConstraints>
+												<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+												<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+											</rowConstraints> -->
+											<children>
+												<Label text="Total Amount" styleClass="cart_title">
+													<font>
+														<Font size="15.0" />
+													</font>
+												</Label>
+												<Label fx:id="myOrderTotalAmt" styleClass="cart_title" text="\$ 12000.00" textFill="#4d4d4d" GridPane.columnIndex="1">
+													<font>
+														<Font name="System Bold" size="15.0" />
+													</font>
+												</Label>
+											</children>
+										</GridPane>
+										<HBox fx:id="radioHBox" alignment="CENTER_RIGHT" spacing="50.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: #e7e7e7;">
+											<children>
+												<JFXRadioButton selected="true" text="Pay Now">
+													<toggleGroup>
+														<ToggleGroup fx:id="payNowPayLaterToggleGroup" />
+													</toggleGroup>
+												</JFXRadioButton>
+												<JFXRadioButton text="Pay Later" toggleGroup="$payNowPayLaterToggleGroup" />
+											</children>
+											<padding>
+												<Insets bottom="15.0" top="15.0" />
+											</padding>
+										</HBox>
+									</children>
+								</VBox>
+								<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+									<children>
+										<Button fx:id="myOrderOkBtn" prefWidth="100.0" mnemonicParsing="false" styleClass="btn-success" text="Ok" />
+									</children>
+								</VBox>
+							</children>
+							<padding>
+								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+							</padding>
+						</HBox>
+					</bottom>
+				</BorderPane>
+			</body>
+		</JFXDialogLayout>
+	</JFXDialog>
+
+
+	<stylesheets>
+		<URL value="@/css/material-color.css" />
+		<URL value="@/css/skeleton2.css" />
+		<URL value="@/css/light.css" />
+		<URL value="@/css/bootstrap.css" />
+		<URL value="@/css/shape.css" />
+		<URL value="@/css/typographic.css" />
+		<URL value="@/css/helpers.css" />
+		<URL value="@/css/master.css" />
+		<URL value="@/css/newCss.css" />
+	</stylesheets>
+</StackPane>
