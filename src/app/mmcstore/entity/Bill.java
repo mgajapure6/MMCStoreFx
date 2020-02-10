@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import app.mmcstore.dto.CustomerBillDto;
+import app.mmcstore.dto.CustomerDashboardDto;
 import app.mmcstore.dto.ProviderBillDto;
 
 @Entity
@@ -43,7 +44,15 @@ import app.mmcstore.dto.ProviderBillDto;
 				@ColumnResult(name = "billId", type = Integer.class),
 				@ColumnResult(name = "billDate", type = Date.class),
 				@ColumnResult(name = "isPaid", type = Boolean.class),
-				@ColumnResult(name = "billAmount", type = Double.class) })) })
+				@ColumnResult(name = "billAmount", type = Double.class) })),
+		
+		@SqlResultSetMapping(name = "CustomerDashboardDtoMapping", 
+		classes = @ConstructorResult(targetClass = CustomerDashboardDto.class, columns = {
+				@ColumnResult(name = "totalBill", type = Integer.class),
+				@ColumnResult(name = "paidBill", type = Integer.class),
+				@ColumnResult(name = "unpaidBill", type = Integer.class) })) 
+		
+})
 public class Bill {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

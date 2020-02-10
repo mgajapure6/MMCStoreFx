@@ -68,68 +68,68 @@
 .btn-primary,
 .check-primary .box
 {
-  -base : -primary;
+  /*-base : -primary;*/
   -fx-background-color : -base;
 }
 
 .btn-grapefruit {
-  -base : -grapefruit;
+  /*-base : -grapefruit;*/
   -fx-background-color : -grapefruit;
 }
 
 .btn-info,
 .check-info .box
 {
-  -base : -info;
+  /*-base : -info;*/
   -fx-background-color : -base;
 }
 
 .btn-success,
 .check-success .box
 {
-  -base : -success;
+  /*-base : -success;*/
   -fx-background-color : -success;
 }
 
 .btn-warning,
 .check-warning .box
 {
-  -base : -warning;
+  /*-base : -warning;*/
   -fx-background-color : -base;
 }
 
 .btn-danger,
 .check-danger .box
 {
-  -base : -danger;
+  /*-base : -danger;*/
   -fx-background-color : -base;
 }
 
 .btn-secondary,
 .check-secondary .box
 {
-  -base : -purple;
+  /*-base : -purple;*/
   -fx-background-color : -base;
 }
 
 .btn-white
 {
-    -base : white;
+    /*-base : white;*/
     -fx-background-color : -base;
 }
 
 .btn-white:hover:focused
 {
-  -icon-color : -text-color;
+  /*-icon-color : -text-color;*/
 }
 
 .btn-white:hover {
-    -icon-color : white;
+    /*-icon-color : white;*/
 }
 
 .btn-mint
 {
-  -base : -mint;
+  /*-base : -mint;*/
   -fx-background-color : -base;
 }
 

@@ -53,21 +53,45 @@ public class ProductService {
 		}
 		return true;
 	}
-
-	public Boolean updateProduct(Product product) {
-		boolean isUpdated = false;
-		if (product != null) {
+	
+	public Boolean saveProduct(ProviderProduct pp) {
+		if (pp.getProduct()!= null) {
 			try {
-				isUpdated = productDao1.update(product);
+				productDao1.create(pp.getProduct());
 			} catch (Exception e) {
 				e.printStackTrace();
 				return false;
 			}
-		} else {
-			return isUpdated;
 		}
 
-		return isUpdated;
+
+		try {
+			providerProductDao.create(pp);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	public Boolean updateProduct(ProviderProduct pp) {
+		if (pp.getProduct()!= null) {
+			try {
+				productDao1.update(pp.getProduct());
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+
+
+		try {
+			providerProductDao.update(pp);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 
 	public List<ProviderProduct> getAllProviderProducts() {

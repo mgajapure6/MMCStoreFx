@@ -52,7 +52,7 @@
 												<VBox prefHeight="100.0" prefWidth="211.0">
 													<children>
 														<Label fx:id="myOrdersTotalOrders" styleClass="h3" text="540" />
-														<Label layoutX="10.0" layoutY="10.0" styleClass="h5" text="Total Orders" />
+														<Label layoutX="10.0" layoutY="10.0" styleClass="h5" text="Total Bills" />
 													</children>
 												</VBox>
 												<FontAwesomeIconView glyphName="" size="40" styleClass="text-warning" />
@@ -99,7 +99,7 @@
 											<children>
 												<VBox prefHeight="100.0" prefWidth="211.0">
 													<children>
-														<Label fx:id="myOrderPendingAmt" styleClass="h3" text="540" />
+														<Label fx:id="myOrderPendingAmt" styleClass="h3" text="0.00" />
 														<Label layoutX="10.0" layoutY="10.0" styleClass="h5" text="Pending Amount" />
 													</children>
 												</VBox>
@@ -123,8 +123,8 @@
 											<children>
 												<VBox prefHeight="100.0" prefWidth="211.0">
 													<children>
-														<Label fx:id="myOrderPaidAmt" styleClass="h3" text="540" />
-														<Label layoutX="10.0" layoutY="10.0" styleClass="h5" text="Paid Amount" />
+														<Label fx:id="myOrderPaidBill" styleClass="h3" text="540" />
+														<Label layoutX="10.0" layoutY="10.0" styleClass="h5" text="Paid Bills" />
 													</children>
 												</VBox>
 												<FontAwesomeIconView glyphName="INR" size="40" styleClass="text-warning" />

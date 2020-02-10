@@ -38,6 +38,11 @@
 										<Font size="15.0" />
 									</font>
 								</TextField>
+								<Button fx:id="reportBtn" mnemonicParsing="false" prefHeight="30.0" prefWidth="121.0" styleClass="btn-danger" text="Get Report">
+									<font>
+										<Font size="14.0" />
+									</font>
+								</Button>
 							</children>
 						</HBox>
 					</children>
@@ -74,7 +79,7 @@
 	<JFXDialog fx:id="productDialog">
 		<JFXDialogLayout style="-fx-background-color:#fff">
 			<heading>
-				<Label prefHeight="38.0" prefWidth="200.0" text="Add Product">
+				<Label fx:id="productDialogTitle" prefHeight="38.0" prefWidth="200.0" text="Add Product">
 					<styleClass>
 						<String fx:value="h3" />
 						<String fx:value="title" />
@@ -170,7 +175,7 @@
 						</VBox>
 						<HBox alignment="TOP_CENTER" spacing="20.0">
 							<children>
-								<Button fx:id="saveProductButton" styleClass="btn-success" minHeight="30.0" mnemonicParsing="false" prefWidth="100.0" text="Save">
+								<Button fx:id="saveProductButton" styleClass="btn-success" minHeight="30.0" mnemonicParsing="false" prefWidth="150.0" text="Save">
 									<font>
 										<Font size="15.0" />
 									</font>

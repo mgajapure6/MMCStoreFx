@@ -44,7 +44,7 @@
                            <children>
                               <GNAvatarView fx:id="avatar" strokeWidth="0.0">
                                  <image>
-                                    <Image url="@/img/logo-mini.png" />
+                                    <Image url="@/img/logo.png" />
                                  </image>
                                  <effect>
                                     <DropShadow color="#00000035" />
@@ -94,12 +94,12 @@
                                        </styleClass>
                                     </Button>
                                     <Label fx:id="lbl_error" styleClass="text-danger" text="Invalid username or password." visible="false" />
-                                    <HBox alignment="CENTER" prefHeight="17.0" prefWidth="289.0">
+                                    <!-- <HBox alignment="CENTER" prefHeight="17.0" prefWidth="289.0">
                                        <children>
                                           <Label text="Forgot your name of the" />
                                           <Hyperlink text="user / password" />
                                        </children>
-                                    </HBox>
+                                    </HBox> -->
                                     <Hyperlink alignment="CENTER_RIGHT" contentDisplay="RIGHT" onMouseClicked="#switchCreate" text="Create your account">
                                        <graphic>
                                           <SVGPath content="M16.01 11H4v2h12.01v3L20 12l-3.99-4z" />

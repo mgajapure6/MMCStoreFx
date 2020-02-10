@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXSnackbar;
 
 import app.mmcstore.common.DateFormatUtil;
+import app.mmcstore.dto.CustomerDashboardDto;
 import app.mmcstore.dto.ProductDto;
 import app.mmcstore.entity.Bill;
 import app.mmcstore.entity.User;
@@ -55,7 +56,7 @@ public class CustomerMyOrderView implements Initializable {
 	@FXML
 	Label myOrderPendingAmt;
 	@FXML
-	Label myOrderPaidAmt;
+	Label myOrderPaidBill;
 	@FXML
 	Label myOrderNumberTitle;
 	@FXML
@@ -88,6 +89,12 @@ public class CustomerMyOrderView implements Initializable {
 	public void tabOne() {
 		//BillDao billDao = new BillDao();
 		BillService billService = new BillService();
+		
+		CustomerDashboardDto cddto = billService.getCustomerBillDashboardDetail(loggedUser.getCustomer().getCustomerId());
+		myOrdersTotalOrders.setText(String.valueOf(cddto.getTotalBill()));
+		myOrderPendingBills.setText(String.valueOf(cddto.getUnpaidBill()));
+		myOrderPaidBill.setText(String.valueOf(cddto.getPaidBill()));
+		
 		List<Bill> bills = billService.getBillsByCustomerId(loggedUser.getCustomer().getCustomerId());
 
 		for (Bill bill : bills) {

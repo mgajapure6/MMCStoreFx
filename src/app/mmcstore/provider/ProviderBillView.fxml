@@ -46,13 +46,18 @@
 					<children>
 						<HBox>
 							<children>
-								<HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+								<HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" spacing="10.0">
 									<children>
 										<TextField fx:id="searchField" promptText="Search Bill..." HBox.hgrow="ALWAYS">
 											<font>
 												<Font size="15.0" />
 											</font>
 										</TextField>
+										<Button fx:id="reportBtn" mnemonicParsing="false" prefHeight="30.0" prefWidth="121.0" styleClass="btn-danger" text="Get Report">
+											<font>
+												<Font size="14.0" />
+											</font>
+										</Button>
 									</children>
 									<HBox.margin>
 										<Insets bottom="10.0" top="10.0" />

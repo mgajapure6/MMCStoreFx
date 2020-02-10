@@ -59,23 +59,44 @@ public class UserService {
 
 	}
 
-//	public User getByUsername(String username) {
-//		HashMap<String, Object> properties = new HashMap<>();
-//		properties.put("userName", username);
-//		User user = null;
-//		try {
-//			user = (User) userDao1.findByPropertiesIfEquals(properties);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		System.out.println("getByUsername user::::" + user);
-//		return user;
-//	}
+	public boolean updateUser(User user, Customer customer, Provider provider) {
+		if (customer != null) {
+			try {
+				customerDao.update(customer);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+			user.setCustomer(customer);
+			user.setProvider(null);
+		}
+
+		if (provider != null) {
+			try {
+				providerDao.update(provider);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+			user.setCustomer(null);
+			user.setProvider(provider);
+		}
+
+		try {
+			userDao1.update(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+
+	}
+
 
 	public User getByUsernameAndPassword(String username, String password) {
 		User user = null;
 		try {
-			user = (User) userDao1.findUserByUsernameAndPassword(username,password);
+			user = (User) userDao1.findUserByUsernameAndPassword(username, password);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -94,5 +115,4 @@ public class UserService {
 		return user;
 	}
 
-	
 }

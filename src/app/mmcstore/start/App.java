@@ -2,12 +2,13 @@ package app.mmcstore.start;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import com.gn.decorator.GNDecorator;
 import com.gn.decorator.options.ButtonType;
 import com.sun.javafx.application.LauncherImpl;
 
 import app.mmcstore.common.Section;
-import app.mmcstore.common.SectionManager;
 import app.mmcstore.common.UserDetail;
 import app.mmcstore.common.ViewManager;
 import app.mmcstore.entity.User;
@@ -22,6 +23,8 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class App extends Application {
+	
+	static Logger logger = Logger.getLogger(App.class);
 
 	public static final GNDecorator decorator = new GNDecorator();
 	public static final Scene scene = decorator.getScene();
@@ -51,7 +54,7 @@ public class App extends Application {
 
 	@Override
 	public synchronized void init() {
-		section = SectionManager.get();
+		//section = SectionManager.get();
 
 		float total = 43; // the difference represents the views not loaded
 		increment = 100f / total;
@@ -116,6 +119,7 @@ public class App extends Application {
 	}
 
 	public static void main(String[] args) {
+		logger.info("Launching App From main Method");
 		LauncherImpl.launchApplication(App.class, Loader.class, args);
 	}
 

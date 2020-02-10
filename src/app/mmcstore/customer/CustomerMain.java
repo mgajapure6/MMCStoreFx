@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import app.mmcstore.entity.User;
+import app.mmcstore.start.App;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -54,6 +56,8 @@ public class CustomerMain implements Initializable {
 
 	@FXML
 	private VBox content;
+	
+	User loggedUser = App.getUserDetail().getLoggedUser();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -83,6 +87,12 @@ public class CustomerMain implements Initializable {
 	public void showMyOrderView() throws IOException {
 		title.setText("My Orders");
 		contentBody.setContent(FXMLLoader.load(getClass().getResource("CustomerMyOrderView.fxml")));
+	}
+	
+	@FXML
+	public void showMyProfileView() throws IOException {
+		title.setText("My Profile");
+		contentBody.setContent(FXMLLoader.load(getClass().getResource("CustomerMyProfileView.fxml")));
 	}
 
 	@FXML

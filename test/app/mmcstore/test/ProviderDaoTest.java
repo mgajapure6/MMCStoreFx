@@ -16,7 +16,7 @@ public class ProviderDaoTest {
 
 	@Before
 	public void setup() {
-		System.out.println("setup");
+		System.out.println("ProviderDao test setup");
 		providerDao = new ProviderDao(Persistence.createEntityManagerFactory("MMCStore"));
 	}
 

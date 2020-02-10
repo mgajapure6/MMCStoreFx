@@ -1,16 +1,31 @@
 
 package app.mmcstore.provider;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialog.DialogTransition;
 
 import animatefx.animation.SlideInLeft;
+import app.mmcstore.common.DateFormatUtil;
+import app.mmcstore.common.ITextTableGenerator;
+import app.mmcstore.common.PdfViewer;
 import app.mmcstore.dto.ProviderProductDto;
 import app.mmcstore.entity.Product;
+import app.mmcstore.entity.ProviderProduct;
 import app.mmcstore.entity.User;
 import app.mmcstore.services.ProductService;
 import app.mmcstore.start.App;
@@ -39,6 +54,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 
 public class ProviderProductView implements Initializable {
@@ -58,18 +74,15 @@ public class ProviderProductView implements Initializable {
 	private TableColumn<ProviderProductDto, Double> c5;
 	@FXML
 	private TableColumn<ProviderProductDto, ProviderProductDto> c6;
-	
+
 	@FXML
 	private Button addProductBtn;
-//	@FXML
-//	private Button ediProductBtn;
-//	@FXML
-//	private Button deleteProductBtn;
+	@FXML
+	private Button reportBtn;
 	@FXML
 	private TextField searchField;//
 	@FXML
 	private Button saveProductButton;
-
 	@FXML
 	private JFXDialog productDialog;
 	@FXML
@@ -80,7 +93,6 @@ public class ProviderProductView implements Initializable {
 	private TextField productQtyField;
 	@FXML
 	private TextField productPriceField;
-
 	@FXML
 	private JFXDialog productDeleteConfirmDialog;
 	@FXML
@@ -88,30 +100,28 @@ public class ProviderProductView implements Initializable {
 
 	@FXML
 	private Label lbl_pname_err;
-
 	@FXML
 	private Label lbl_pqty_err;
-
 	@FXML
 	private Label lbl_pprice_err;
-
 	@FXML
 	private Button closeDialogButton;
-
 	@FXML
 	private Button alertDialogBtn;
-
 	@FXML
 	private Label alertDialogTitle;
-
 	@FXML
 	private JFXDialog alertDialog;
+	@FXML
+	private Label productDialogTitle;
 
 	User loggedUser = App.getUserDetail().getLoggedUser();
 
 	ObservableList<ProviderProductDto> productsObservableList = FXCollections.observableArrayList();
-	
+
 	private String flag;
+
+	private Integer providerProductId;
 
 	public String getFlag() {
 		return flag;
@@ -121,10 +131,19 @@ public class ProviderProductView implements Initializable {
 		this.flag = flag;
 	}
 
+	public Integer getProviderProductId() {
+		return providerProductId;
+	}
+
+	public void setProviderProductId(Integer providerProductId) {
+		this.providerProductId = providerProductId;
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		setFlag("N");
 		saveProductButton.setText("Save Product");
+		productDialogTitle.setText("Add Product");
 		alertDialog.setDialogContainer(root);
 		lbl_pname_err.setVisible(false);
 		lbl_pqty_err.setVisible(false);
@@ -144,7 +163,6 @@ public class ProviderProductView implements Initializable {
 
 		// c1.setCellValueFactory(new PropertyValueFactory<>("product.productId"));
 
-		
 		c1.setCellValueFactory(
 				new Callback<TableColumn.CellDataFeatures<ProviderProductDto, ProviderProductDto>, ObservableValue<ProviderProductDto>>() {
 					@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -180,47 +198,47 @@ public class ProviderProductView implements Initializable {
 					}
 
 				});
-		
-		c6.setCellValueFactory(
-                param -> new ReadOnlyObjectWrapper<>(param.getValue())
-        );
-		
+
+		c6.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+
 		c6.setCellFactory(param -> new TableCell<ProviderProductDto, ProviderProductDto>() {
 			@Override
-            protected void updateItem(ProviderProductDto ppd, boolean empty) {
+			protected void updateItem(ProviderProductDto ppd, boolean empty) {
 				super.updateItem(ppd, empty);
 
-                if (ppd == null) {
-                    setGraphic(null);
-                    return;
-                }
+				if (ppd == null) {
+					setGraphic(null);
+					return;
+				}
 
-                HBox hb = new HBox();
-                hb.setAlignment(Pos.CENTER_RIGHT);
-                hb.setSpacing(15.0);
-                
-                FontAwesomeIconView editIcon = new FontAwesomeIconView(FontAwesomeIcon.EDIT);
-                editIcon.setSize("20.0");
-                editIcon.setFill(Color.WHITE);
-                Button editBtn = new Button("", editIcon);
-                Tooltip editTip = new Tooltip("Edit Product");
-                Tooltip.install(editBtn, editTip);
-                editBtn.getStyleClass().add("btn-info");
-                
-                editBtn.setOnAction(e -> {
-                	setFlag("E");
-                	saveProductButton.setText("Update Product");
-                	tableView.getSelectionModel().select(getIndex());
-                	productNameField.setText(ppd.getProductName());
-        			productDescField.setText(ppd.getDescription());
-        			productQtyField.setText(String.valueOf(ppd.getQtyAvailable()));
-        			productPriceField.setText(String.valueOf(ppd.getPrice()));
-        			productDialog.setTransitionType(DialogTransition.CENTER);
-        			productDialog.show();
-                });
-                
-                hb.getChildren().addAll(editBtn);
-                setGraphic(editBtn);
+				HBox hb = new HBox();
+				hb.setAlignment(Pos.CENTER_RIGHT);
+				hb.setSpacing(15.0);
+
+				FontAwesomeIconView editIcon = new FontAwesomeIconView(FontAwesomeIcon.EDIT);
+				editIcon.setSize("20.0");
+				editIcon.setFill(Color.WHITE);
+				Button editBtn = new Button("", editIcon);
+				Tooltip editTip = new Tooltip("Edit Product");
+				Tooltip.install(editBtn, editTip);
+				editBtn.getStyleClass().add("btn-info");
+
+				editBtn.setOnAction(e -> {
+					setFlag("E");
+					setProviderProductId(ppd.getProviderProductId());
+					saveProductButton.setText("Update Product");
+					productDialogTitle.setText("Update Product");
+					tableView.getSelectionModel().select(getIndex());
+					productNameField.setText(ppd.getProductName());
+					productDescField.setText(ppd.getDescription());
+					productQtyField.setText(String.valueOf(ppd.getQtyAvailable()));
+					productPriceField.setText(String.valueOf(ppd.getPrice()));
+					productDialog.setTransitionType(DialogTransition.CENTER);
+					productDialog.show();
+				});
+
+				hb.getChildren().addAll(editBtn);
+				setGraphic(editBtn);
 			}
 
 		});
@@ -253,7 +271,9 @@ public class ProviderProductView implements Initializable {
 
 		addProductBtn.setOnAction((e) -> {
 			setFlag("N");
+			setProviderProductId(0);
 			saveProductButton.setText("Save Product");
+			productDialogTitle.setText("Add Product");
 			productNameField.setText("");
 			productDescField.setText("");
 			productQtyField.setText("");
@@ -274,29 +294,44 @@ public class ProviderProductView implements Initializable {
 			if (validProductName() && validProductPrice() && validProductQty()) {
 				Product product = null;
 				boolean isSaved = false;
-				if(getFlag().equals("N")) {
+				if (getFlag().equals("N")) {
 					product = new Product(null, productNameField.getText(), productDescField.getText(),
 							Double.parseDouble(productPriceField.getText()), null);
-					System.out.println("product save:::"+product.toString());
-					isSaved = productService.saveProduct(product, loggedUser.getProvider(),
-							productQtyField.getText().equals("") ? 0 : Integer.parseInt(productQtyField.getText()));
-				}else {
+					System.out.println("product save:::" + product.toString());
+					ProviderProduct pp = new ProviderProduct();
+					pp.setProduct(product);
+					pp.setProvider(loggedUser.getProvider());
+					pp.setProviderProductId(getProviderProductId());
+					pp.setQtyAvailable(Integer.parseInt(productQtyField.getText()));
+					isSaved = productService.saveProduct(pp);
+				} else {
 					ProviderProductDto p = productsObservableList.get(tableView.getSelectionModel().getSelectedIndex());
 					product = new Product(p.getProductId(), productNameField.getText(), productDescField.getText(),
 							Double.parseDouble(productPriceField.getText()), null);
-					System.out.println("product update:::"+product.toString());
-					isSaved = productService.saveProduct(product, loggedUser.getProvider(),
-							productQtyField.getText().equals("") ? 0 : Integer.parseInt(productQtyField.getText()));
+					ProviderProduct pp = new ProviderProduct();
+					pp.setProduct(product);
+					pp.setProvider(loggedUser.getProvider());
+					pp.setProviderProductId(getProviderProductId());
+					pp.setQtyAvailable(Integer.parseInt(productQtyField.getText()));
+					System.out.println("ProviderProductId update:::" + getProviderProductId());
+					isSaved = productService.updateProduct(pp);
 				}
-				
+
 				if (isSaved) {
+					productsObservableList.clear();
+					List<ProviderProductDto> pps = productService.getAllProviderProductsByProviderId(
+							loggedUser.getProvider().getProviderId(), loggedUser.getProvider());
+
+					for (ProviderProductDto providerProduct : pps) {
+						productsObservableList.add(providerProduct);
+					}
 					productDialog.close();
-					if(getFlag().equals("N")) {
+					if (getFlag().equals("N")) {
 						alertDialogTitle.setText("Product Saved Successfully");
-					}else {
+					} else {
 						alertDialogTitle.setText("Product Updated Successfully");
 					}
-					
+
 					alertDialog.setTransitionType(DialogTransition.CENTER);
 					alertDialogBtn.getStyleClass().remove("btn-danger");
 					alertDialogBtn.getStyleClass().add("btn-info");
@@ -305,23 +340,35 @@ public class ProviderProductView implements Initializable {
 					productDescField.setText("");
 					productQtyField.setText("");
 					productPriceField.setText("");
-					
+
 				} else {
-					if(getFlag().equals("N")) {
-						alertDialogTitle.setText("Something went worng.. Unable to save this product");
-					}else {
-						alertDialogTitle.setText("Something went worng.. Unable to update this product");
+					if (getFlag().equals("N")) {
+						alertDialogTitle.setText("Error.. Unable to save product");
+					} else {
+						alertDialogTitle.setText("Error.. Unable to update product");
 					}
 					alertDialog.setTransitionType(DialogTransition.CENTER);
 					alertDialogBtn.getStyleClass().remove("btn-info");
 					alertDialogBtn.getStyleClass().add("btn-danger");
 					alertDialog.show();
 				}
-			}else {
-				//validProductName() ?  : 
-				if(!validProductName()) {lbl_pname_err.setVisible(true);} else {lbl_pname_err.setVisible(false);}
-				if(!validProductQty()) {lbl_pqty_err.setVisible(true);} else {lbl_pqty_err.setVisible(false);}
-				if(!validProductPrice()) {lbl_pprice_err.setVisible(true);} else {lbl_pprice_err.setVisible(false);}
+			} else {
+				// validProductName() ? :
+				if (!validProductName()) {
+					lbl_pname_err.setVisible(true);
+				} else {
+					lbl_pname_err.setVisible(false);
+				}
+				if (!validProductQty()) {
+					lbl_pqty_err.setVisible(true);
+				} else {
+					lbl_pqty_err.setVisible(false);
+				}
+				if (!validProductPrice()) {
+					lbl_pprice_err.setVisible(true);
+				} else {
+					lbl_pprice_err.setVisible(false);
+				}
 			}
 		});
 
@@ -371,15 +418,56 @@ public class ProviderProductView implements Initializable {
 			productPriceField.setText("");
 			productDialog.close();
 		});
-		
+
 		alertDialogBtn.setOnAction((e) -> {
 			setFlag("N");
 			saveProductButton.setText("Save Product");
+			productDialogTitle.setText("Add Product");
 			productNameField.setText("");
 			productDescField.setText("");
 			productQtyField.setText("");
 			productPriceField.setText("");
 			alertDialog.close();
+		});
+
+		reportBtn.setOnAction((e) -> {
+			FileChooser pdfFileChooser = new FileChooser();// "C:\\Users\\Mgg\\Documents"
+			pdfFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+			pdfFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
+			pdfFileChooser.setInitialFileName(loggedUser.getProvider().getProviderName().replaceAll(" ", "_")
+					+ "_Products_Report" + DateFormatUtil.dateToString(new Date(), "dd-MM-yyyy") + "");
+			pdfFileChooser.setTitle("Save Products Report");
+			File file = pdfFileChooser.showSaveDialog(reportBtn.getScene().getWindow());
+			if (file != null) {
+				String savePath = file.getAbsolutePath();
+				// System.out.println(savePath);
+				String title = "MMC Store Products Report",
+						subTitle = "Provider : " + loggedUser.getProvider().getProviderName();
+				int colNum = 5;
+				List<List<String>> dataSet = new ArrayList<List<String>>();
+				String[] tableTitleList = { " Sr. No. ", " Product Name ", " Product Description ",
+						" Available Quantity ", " Product Price " };
+				dataSet.add(Arrays.asList(tableTitleList));
+				int i = 1;
+				for (ProviderProductDto ppd : productsObservableList) {
+					List<String> dataLine = new ArrayList<>();
+					dataLine.add(" " + i++ + "");
+					dataLine.add(ppd.getProductName());
+					dataLine.add(ppd.getDescription());
+					dataLine.add(ppd.getQtyAvailable().toString());
+					dataLine.add(ppd.getPrice().toString());
+					dataSet.add(dataLine);
+				}
+				Document document = new Document(PageSize.A4);
+				try {
+					ITextTableGenerator.createPdfTable(document, savePath, title, subTitle, colNum, dataSet);
+					PdfViewer.viewPDFFile(savePath, title);
+				} catch (IOException ex) {
+					Logger.getLogger(ProviderProductView.class.getName()).log(Level.ERROR, null, ex);
+				} catch (DocumentException ex) {
+					Logger.getLogger(ProviderProductView.class.getName()).log(Level.ERROR, null, ex);
+				}
+			}
 		});
 
 	}
@@ -394,7 +482,7 @@ public class ProviderProductView implements Initializable {
 		ProviderProductDto ppd = productsObservableList.get(tableView.getSelectionModel().getSelectedIndex());
 		ProductService productService = new ProductService();
 		Boolean isDeleted = productService.deleteProviderProduct(ppd);
-		if(isDeleted) {
+		if (isDeleted) {
 			productsObservableList.remove(tableView.getSelectionModel().selectedItemProperty().get());
 			productDeleteConfirmDialog.close();
 			alertDialogTitle.setText("Product Deleted Successfully");
@@ -410,7 +498,7 @@ public class ProviderProductView implements Initializable {
 			alertDialogBtn.getStyleClass().add("btn-danger");
 			alertDialog.show();
 		}
-		
+
 	}
 
 	private boolean validProductName() {

@@ -10,8 +10,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.Metamodel;
 
 import app.mmcstore.entity.User;
 
@@ -40,18 +38,16 @@ public class UserDao extends BasicDAO<User> {
 		EntityManager em = getEntityManager();
 		User user = null;
 		try {
-			Metamodel m = em.getMetamodel();
-			EntityType<User> User_ = m.entity(User.class);
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery cq = cb.createQuery();
-			Root<User> root = cq.from(User_);
+			Root<User> root = cq.from(User.class);
 			List<Predicate> predicates = new ArrayList<Predicate>();
 			predicates.add(cb.equal(root.get("userName"), username));
 			predicates.add(cb.equal(root.get("userPassword"), pssword));
 			cq.select(root).where(predicates.toArray(new Predicate[] {}));
 			user = (User) em.createQuery(cq).getSingleResult();
 		} catch (NoResultException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			return null;
 		} finally {
 			em.close();
@@ -64,17 +60,15 @@ public class UserDao extends BasicDAO<User> {
 		EntityManager em = getEntityManager();
 		User user = null;
 		try {
-			Metamodel m = em.getMetamodel();
-			EntityType<User> User_ = m.entity(User.class);
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery cq = cb.createQuery();
-			Root<User> root = cq.from(User_);
+			Root<User> root = cq.from(User.class);
 			List<Predicate> predicates = new ArrayList<Predicate>();
 			predicates.add(cb.equal(root.get("userName"), userName));
 			cq.select(root).where(predicates.toArray(new Predicate[] {}));
 			user = (User) em.createQuery(cq).getSingleResult();
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			return null;
 		} finally {
 			em.close();

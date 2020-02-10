@@ -1,13 +1,26 @@
 package app.mmcstore.provider;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXSnackbar;
 
 import app.mmcstore.common.DateFormatUtil;
+import app.mmcstore.common.ITextTableGenerator;
+import app.mmcstore.common.PdfViewer;
 import app.mmcstore.dto.ProviderBillDto;
 import app.mmcstore.entity.User;
 import app.mmcstore.services.ProviderService;
@@ -30,6 +43,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 
 public class ProviderBillView implements Initializable {
@@ -51,6 +65,9 @@ public class ProviderBillView implements Initializable {
 
 	@FXML
 	private TextField searchField;
+	
+	@FXML
+	private Button reportBtn;
 
 	@FXML
 	private TableView<ProviderBillDto> tableView;
@@ -243,6 +260,52 @@ public class ProviderBillView implements Initializable {
 		alertDialogBtn.setOnAction(event -> {
 			alertDialog.close();
 		});
+		
+		reportBtn.setOnAction((e) -> {
+			FileChooser pdfFileChooser = new FileChooser();// "C:\\Users\\Mgg\\Documents"
+			pdfFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+			pdfFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
+			pdfFileChooser.setInitialFileName(loggedUser.getProvider().getProviderName().replaceAll(" ", "_")
+					+ "_Bills_Report" + DateFormatUtil.dateToString(new Date(), "dd-MM-yyyy") + "");
+			pdfFileChooser.setTitle("Save Bills Report");
+			File file = pdfFileChooser.showSaveDialog(reportBtn.getScene().getWindow());
+			if (file != null) {
+				String savePath = file.getAbsolutePath();
+				// System.out.println(savePath);
+				String title = "MMC Store Provider Bills Report",
+						subTitle = "Provider : " + loggedUser.getProvider().getProviderName();
+				int colNum = 10;
+				List<List<String>> dataSet = new ArrayList<List<String>>();
+				String[] tableTitleList = { " Sr. No. ", " Bill No ", " Status ",
+						" Customer ", " Address ", " product Name ", " Qty Requested ", " Qty Available ", " Price ", " Bill Amount " };
+				dataSet.add(Arrays.asList(tableTitleList));
+				int i = 1;
+				for (ProviderBillDto pbd : billsObservableList) {
+					List<String> dataLine = new ArrayList<>();
+					dataLine.add(" " + i++ + "");
+					dataLine.add(String.valueOf(pbd.getBillId()));
+					dataLine.add(pbd.getStatus());
+					dataLine.add(pbd.getCustomerName());
+					dataLine.add(pbd.getAddress());
+					dataLine.add(pbd.getProductName());
+					dataLine.add(pbd.getQtyRequested().toString());
+					dataLine.add(pbd.getQtyAvailable().toString());
+					dataLine.add(pbd.getPrice().toString());
+					dataLine.add(pbd.getBillAmount().toString());
+					dataSet.add(dataLine);
+				}
+				Document document = new Document(PageSize.A4.rotate());
+				try {
+					ITextTableGenerator.createPdfTable(document, savePath, title, subTitle, colNum, dataSet);
+					PdfViewer.viewPDFFile(savePath, title);
+				} catch (IOException ex) {
+					Logger.getLogger(ProviderProductView.class.getName()).log(Level.ERROR, null, ex);
+				} catch (DocumentException ex) {
+					Logger.getLogger(ProviderProductView.class.getName()).log(Level.ERROR, null, ex);
+				}
+			}
+		});
+
 
 	}
 

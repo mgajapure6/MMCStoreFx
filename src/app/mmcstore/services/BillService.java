@@ -12,6 +12,7 @@ import com.google.gson.JsonElement;
 
 import app.mmcstore.dao.BillDao;
 import app.mmcstore.dao.BillProviderProductDao;
+import app.mmcstore.dto.CustomerDashboardDto;
 import app.mmcstore.dto.ProductDto;
 import app.mmcstore.entity.Bill;
 import app.mmcstore.entity.BillProviderProduct;
@@ -85,11 +86,34 @@ public class BillService {
 		}
 		return pdt;
 	}
-	
+
+	@SuppressWarnings("rawtypes")
+	public CustomerDashboardDto getCustomerBillDashboardDetail(Integer customerId) {
+		String query = "select sum(totalBills) as totalBill, sum(paidBills) as paidBill,"
+				+ "sum(unpaidBills) as unpaidBill "
+				+ "from( select count(*) as totalBills,0 as paidBills,0 as unpaidBills "
+				+ "from bill a join billproviderproduct b on(a.BILLID=b.billId) "
+				+ "where a.customerId = 1 group by a.BILLID "
+				+ "union ALL select 0 as totalBills, count(*) as paidBills, 0 as unpaidBills "
+				+ "from bill a where a.customerId = 1 and a.ISPAID > 0 group by a.BILLID UNION "
+				+ "select 0 as totalBills, 0 as paidBills, count(*) as unpaidBills "
+				+ "from bill a where a.customerId = " + customerId + " and a.ISPAID < 1 group by a.BILLID )t";
+
+		CustomerDashboardDto cddto = null;
+		try {
+			List lll = billDao.executeQuery(query, "CustomerDashboardDtoMapping");
+			cddto = getCustomerDashboardDto(lll);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return cddto;
+	}
+
 	@SuppressWarnings("rawtypes")
 	public Long getCustomerUnpaidBillCountByCustomerId(Integer cid) {
 		Long count = 0l;
-		String query = "select count(*) as unpaidBillCount from bill a where a.customerId = "+cid+" and a.ISPAID !=1";
+		String query = "select count(*) as unpaidBillCount from bill a where a.customerId = " + cid
+				+ " and a.ISPAID !=1";
 		try {
 			List l = billDao.executeQuery(query);
 			count = (Long) l.get(0);
@@ -122,6 +146,18 @@ public class BillService {
 			pds.add(b);
 		}
 		return pds;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private CustomerDashboardDto getCustomerDashboardDto(List list) {
+		CustomerDashboardDto cddto = new CustomerDashboardDto();
+		Gson gson = new Gson();
+		for (Object object : list) {
+			JsonElement jsonElement = gson.toJsonTree(object);
+			System.out.println("getCustomerDashboardDto jsonElement:"+jsonElement);
+			cddto = gson.fromJson(jsonElement, CustomerDashboardDto.class);
+		}
+		return cddto;
 	}
 
 	public boolean updateOnlyBill(Bill selectedBill) {
