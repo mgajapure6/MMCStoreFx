@@ -144,8 +144,8 @@ public class Account implements Initializable {
 
 	private void setProperties() throws IOException {
 
-		Section section = new Section(true, username.getText());
-		SectionManager.save(section);
+		//Section section = new Section(true, username.getText());
+		//SectionManager.save(section);
 		Boolean isCustomer = false;
 		Customer customer = new Customer();
 		Provider provider = new Provider();
@@ -181,7 +181,7 @@ public class Account implements Initializable {
 
 		detail.setSignAction(event -> {
 			App.getUserDetail().getPopOver().hide();
-			SectionManager.save(new Section(false, ""));
+			//SectionManager.save(new Section(false, ""));
 
 			this.password.setText("");
 			this.email.setText("");

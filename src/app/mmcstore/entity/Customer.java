@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -32,6 +33,9 @@ public class Customer {
 
 	@OneToMany(mappedBy = "customer")
 	private Set<Bill> bills;
+	
+	@OneToOne(mappedBy = "customer")
+	private Account account;
 
 	public Customer() {
 		super();
@@ -84,6 +88,14 @@ public class Customer {
 
 	public void setBills(Set<Bill> bills) {
 		this.bills = bills;
+	}
+
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
 	@Override

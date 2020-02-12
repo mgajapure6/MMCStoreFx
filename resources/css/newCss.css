@@ -156,7 +156,12 @@
 	-fx-fixed-cell-size : 100px !important;
 }
 
-
+.sidebar{
+	-fx-background-color: #fb5405;
+	-fx-fill: #fff;
+	-fx-background-fills: #fb5405;
+	-fx-text-fill: #fff;
+}
 
 
 

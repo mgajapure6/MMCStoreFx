@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import org.omg.CORBA.UserException;
+
 import com.jfoenix.controls.JFXBadge;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
@@ -21,6 +23,7 @@ import app.mmcstore.entity.ProviderProduct;
 import app.mmcstore.entity.User;
 import app.mmcstore.services.BillService;
 import app.mmcstore.services.ProductService;
+import app.mmcstore.services.UserService;
 import app.mmcstore.start.App;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -151,17 +154,7 @@ public class CustomerProductView implements Initializable {
 		//BillDao billDao = new BillDao();
 		BillService billService = new BillService();
 		
-		customerUnpaidBillCount = billService.getCustomerUnpaidBillCountByCustomerId(loggedUser.getCustomer().getCustomerId());
-		System.out.println("customerUnpaidBillCount::"+customerUnpaidBillCount);
-		if(customerUnpaidBillCount>=2) {
-			cartDialogBottomVbox.setDisable(true);
-			unpaidErr.setStyle("-fx-text-fill: red !important;-fx-font-size: 14.0px !important;");
-			unpaidErr.setText("Sorry, you are not eligible to purchase from the store. \nUpto 2 bills you can purchase on pay later. \nYou have ("+customerUnpaidBillCount+") pending bills payment due. \nPlease pay now to eligible for purchase.");
-		}else {
-			cartDialogBottomVbox.setDisable(false);
-			unpaidErr.setText("");
-		}
-		
+		UserService userService = new UserService();
 		
 		List<ProviderProduct> providerProducts = productService.getAllProviderProducts();
 		//List<Bill> bills = billService.getBillsByCustomerId(loggedUser.getCustomer().getCustomerId());
@@ -222,8 +215,7 @@ public class CustomerProductView implements Initializable {
 //			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 //				if (StringCheckerUtil.isInteger(newValue) || StringCheckerUtil.isDouble(newValue)) {
 //
-//					if (Double.parseDouble(newValue) > Double
-//							.parseDouble(cartTotalAmt.getText().trim().split(" ")[1])) {
+//					if (Double.parseDouble(newValue) > Double.parseDouble(cartTotalAmt.getText().trim().split(" ")[1])) {
 //						payingAmountField.getStyleClass().add("tferror");
 //						placeOrderBtn.setDisable(true);
 //						placeOrderBalAmt.setText(
@@ -250,6 +242,7 @@ public class CustomerProductView implements Initializable {
 //		});
 
 		cartBuyNowBtn.setOnAction(event -> {
+			
 			Integer itmsCount = 0;
 			for (ProviderProduct providerProduct : cartListView.getItems()) {
 				itmsCount = itmsCount + providerProduct.getQtyAvailable();
@@ -263,39 +256,48 @@ public class CustomerProductView implements Initializable {
 		});
 
 		placeOrderBtn.setOnAction(event -> {
-			ObservableList<ProviderProduct> list = cartListView.getItems();
-			Set<BillProviderProduct> billProviderProductSet = new HashSet<>();
-			for (ProviderProduct providerProduct : list) {
-				BillProviderProduct bpp = new BillProviderProduct();
-				bpp.setQtyRequested(providerProduct.getQtyAvailable());
-				bpp.setProviderProduct(providerProduct);
-				billProviderProductSet.add(bpp);
-			}
 			JFXRadioButton rb = (JFXRadioButton) payNowPayLaterToggleGroup.getSelectedToggle();
 			boolean isPaid = rb.getText().equals("Pay Later")  ? false : true; 
-			boolean isSaved = billService.saveBill(loggedUser.getCustomer(), billProviderProductSet, isPaid);
-			if (isSaved) {
-				cartListView.getItems().clear();
-				placeOrderDialog.close();
-				cartDialog.close();
-				cartTotalAmt.setText("$ 0.00");
-				cartBadge.setText("0");
-				alertDialogTitle.setText("Order Placed Successfully");
-				alertDialog.setTransitionType(DialogTransition.CENTER);
-				alertDialogBtn.getStyleClass().remove("btn-danger");
-				alertDialogBtn.getStyleClass().add("btn-info");
-				alertDialog.show();
-
-				// Alerts.success("Success", "Order Placed Successfully");
-			} else {
-				// Alerts.error("Error", "Something went worng.. Unable to save this order.");
-				alertDialogTitle.setText("Something went worng.. Unable to save this order");
+			Double existAmt = userService.getCustomerAccountBalance(loggedUser.getCustomer().getCustomerId());
+			Double billAmt = calculateCartValue();
+			if(isPaid && existAmt< billAmt){
+				alertDialogTitle.setText("Sorry.. Your account balance is lower than cart amount.");
 				alertDialog.setTransitionType(DialogTransition.CENTER);
 				alertDialogBtn.getStyleClass().remove("btn-info");
 				alertDialogBtn.getStyleClass().add("btn-danger");
 				alertDialog.show();
+			}else {
+				ObservableList<ProviderProduct> list = cartListView.getItems();
+				Set<BillProviderProduct> billProviderProductSet = new HashSet<>();
+				for (ProviderProduct providerProduct : list) {
+					BillProviderProduct bpp = new BillProviderProduct();
+					bpp.setQtyRequested(providerProduct.getQtyAvailable());
+					bpp.setProviderProduct(providerProduct);
+					billProviderProductSet.add(bpp);
+				}
+				boolean isSaved = billService.saveBill(loggedUser.getCustomer(), billProviderProductSet, isPaid, billAmt);
+				if (isSaved) {
+					cartListView.getItems().clear();
+					placeOrderDialog.close();
+					cartDialog.close();
+					cartTotalAmt.setText("$ 0.00");
+					cartBadge.setText("0");
+					alertDialogTitle.setText("Order Placed Successfully");
+					alertDialog.setTransitionType(DialogTransition.CENTER);
+					alertDialogBtn.getStyleClass().remove("btn-danger");
+					alertDialogBtn.getStyleClass().add("btn-info");
+					alertDialog.show();
+
+					// Alerts.success("Success", "Order Placed Successfully");
+				} else {
+					// Alerts.error("Error", "Something went worng.. Unable to save this order.");
+					alertDialogTitle.setText("Something went worng.. Unable to save this order");
+					alertDialog.setTransitionType(DialogTransition.CENTER);
+					alertDialogBtn.getStyleClass().remove("btn-info");
+					alertDialogBtn.getStyleClass().add("btn-danger");
+					alertDialog.show();
+				}
 			}
-			// bill.setBillProviderProducts(set);
 
 		});
 
@@ -345,11 +347,21 @@ public class CustomerProductView implements Initializable {
 	@FXML
 	public void openCart() {
 		calculateCartValue();
+		BillService billService = new BillService();
+		customerUnpaidBillCount = billService.getCustomerUnpaidBillCountByCustomerId(loggedUser.getCustomer().getCustomerId());
+		if(customerUnpaidBillCount>=2) {
+			cartDialogBottomVbox.setDisable(true);
+			unpaidErr.setStyle("-fx-text-fill: red !important;-fx-font-size: 14.0px !important;");
+			unpaidErr.setText("Sorry, you are not eligible to purchase from the store. \nUpto 2 bills you can purchase on pay later. \nYou have ("+customerUnpaidBillCount+") pending bills payment due. \nPlease pay now to eligible for purchase.");
+		}else {
+			cartDialogBottomVbox.setDisable(false);
+			unpaidErr.setText("");
+		}
 		cartDialog.setTransitionType(DialogTransition.CENTER);
 		cartDialog.show();
 	}
 
-	void calculateCartValue() {
+	Double calculateCartValue() {
 		Double totAmt = 0.0;
 		for (ProviderProduct providerProduct : cartListView.getItems()) {
 			Double itmsTotAmt = providerProduct.getProduct().getPrice() * providerProduct.getQtyAvailable();
@@ -358,6 +370,7 @@ public class CustomerProductView implements Initializable {
 		}
 		System.out.println("totAmt: " + totAmt);
 		cartTotalAmt.setText("$ " + String.valueOf(totAmt));
+		return totAmt;
 	}
 
 	class ProductListViewCell extends ListCell<ProviderProduct> {

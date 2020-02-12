@@ -338,10 +338,10 @@
 			</body>
 		</JFXDialogLayout>
 	</JFXDialog>
-	<JFXDialog fx:id="alertDialog">
-		<JFXDialogLayout style="-fx-background-color:#fff">
+	<JFXDialog fx:id="alertDialog" prefWidth="700.0">
+		<JFXDialogLayout style="-fx-background-color:#fff" prefWidth="700.0">
 			<heading>
-				<Label fx:id="alertDialogTitle" prefHeight="38.0" prefWidth="400.0" text="">
+				<Label fx:id="alertDialogTitle" prefHeight="38.0" prefWidth="700.0" text="">
 					<styleClass>
 						<String fx:value="h4" />
 						<String fx:value="title" />

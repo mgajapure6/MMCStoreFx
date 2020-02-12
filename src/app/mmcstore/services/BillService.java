@@ -32,18 +32,22 @@ public class BillService {
 		}
 	}
 
-	public Boolean saveBill(Customer customer, Set<BillProviderProduct> billProviderProductSet, boolean isPaid) {
+	public Boolean saveBill(Customer customer, Set<BillProviderProduct> billProviderProductSet, boolean isPaid, Double billAmt) {
 		Bill bill = new Bill();
 		bill.setCustomer(customer);
 		bill.setBillDate(new Date());
 		bill.setIsPaid(isPaid);
 		try {
+			
 			billDao.create(bill);
+			
 			for (BillProviderProduct billProviderProduct : billProviderProductSet) {
 				billProviderProduct.setBill(bill);
 				billProviderProductDao.create(billProviderProduct);
 			}
-			return true;
+			
+			UserService userService = new UserService();
+			return userService.updateCustomerAccount(billAmt, customer.getCustomerId());
 		} catch (Exception e) {
 			return false;
 		}
@@ -89,15 +93,39 @@ public class BillService {
 
 	@SuppressWarnings("rawtypes")
 	public CustomerDashboardDto getCustomerBillDashboardDetail(Integer customerId) {
-		String query = "select sum(totalBills) as totalBill, sum(paidBills) as paidBill,"
-				+ "sum(unpaidBills) as unpaidBill "
-				+ "from( select count(*) as totalBills,0 as paidBills,0 as unpaidBills "
-				+ "from bill a join billproviderproduct b on(a.BILLID=b.billId) "
-				+ "where a.customerId = 1 group by a.BILLID "
-				+ "union ALL select 0 as totalBills, count(*) as paidBills, 0 as unpaidBills "
-				+ "from bill a where a.customerId = 1 and a.ISPAID > 0 group by a.BILLID UNION "
-				+ "select 0 as totalBills, 0 as paidBills, count(*) as unpaidBills "
-				+ "from bill a where a.customerId = " + customerId + " and a.ISPAID < 1 group by a.BILLID )t";
+		String query = "select sum(totalBills) as totalBill,sum(paidBills) as paidBill,sum(unpaidBills) as unpaidBill, sum(unpaidAmount) as unpaidAmount, sum(paidAmount) as paidAmount	" + 
+		"from(select count(*) as totalBills,0 as paidBills,0 as unpaidBills, 0 unpaidAmount, 0 paidAmount " + 
+		"from bill a join billproviderproduct b on(a.BILLID=b.billId) where a.customerId = "+ customerId +" " + 
+		" union ALL " + 
+		"select 0 as totalBills, count(*) as paidBills, 0 as unpaidBills, 0 unpaidAmount, 0 paidAmount " + 
+		"from bill a where a.customerId ="+ customerId +" " + 
+		"and a.ISPAID > 0 group by a.BILLID " + 
+		"UNION select 0 as totalBills, 0 as paidBills, count(*) as unpaidBills, 0 unpaidAmount, 0 paidAmount " + 
+		"from bill a where a.customerId = "+ customerId +" " +  
+		"and a.ISPAID < 1 group by a.BILLID " + 
+		"UNION all select 0 as totalBills,0 as paidBills,0 as unpaidBills,(b.qtyRequested * d.price) as unpaidAmount, 0 paidAmount " + 
+		"from bill a join billproviderproduct b on(a.billId=b.billId) join providerproduct c on (b.providerProductId = c.providerProductId) " + 
+		"join product d on (c.productId = d.productId) " + 
+		"where a.customerId = "+ customerId +" " +  
+		"and a.ISPAID < 1 " + 
+		"UNION select 0 as totalBills,0 as paidBills,0 as unpaidBills,0 unpaidAmount, (b.qtyRequested * d.price) as paidAmount " + 
+		"from bill a join billproviderproduct b on(a.billId=b.billId) " +
+		"join providerproduct c on (b.providerProductId = c.providerProductId) " + 
+		"join product d on (c.productId = d.productId) " + 
+		"where a.customerId =  " + customerId +
+		" and a.ISPAID > 0 )t";
+		
+		
+//		
+//		String query = "select sum(totalBills) as totalBill, sum(paidBills) as paidBill,"
+//				+ "sum(unpaidBills) as unpaidBill "
+//				+ "from( select count(*) as totalBills,0 as paidBills,0 as unpaidBills "
+//				+ "from bill a join billproviderproduct b on(a.BILLID=b.billId) "
+//				+ "where a.customerId = 1 group by a.BILLID "
+//				+ "union ALL select 0 as totalBills, count(*) as paidBills, 0 as unpaidBills "
+//				+ "from bill a where a.customerId = 1 and a.ISPAID > 0 group by a.BILLID UNION "
+//				+ "select 0 as totalBills, 0 as paidBills, count(*) as unpaidBills "
+//				+ "from bill a where a.customerId = " + customerId + " and a.ISPAID < 1 group by a.BILLID )t";
 
 		CustomerDashboardDto cddto = null;
 		try {

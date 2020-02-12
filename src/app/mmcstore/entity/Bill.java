@@ -50,7 +50,8 @@ import app.mmcstore.dto.ProviderBillDto;
 		classes = @ConstructorResult(targetClass = CustomerDashboardDto.class, columns = {
 				@ColumnResult(name = "totalBill", type = Integer.class),
 				@ColumnResult(name = "paidBill", type = Integer.class),
-				@ColumnResult(name = "unpaidBill", type = Integer.class) })) 
+				@ColumnResult(name = "unpaidBill", type = Integer.class),
+				@ColumnResult(name = "unpaidAmount", type = Double.class)})) 
 		
 })
 public class Bill {

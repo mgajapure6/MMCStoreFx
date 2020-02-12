@@ -16,6 +16,7 @@ import app.mmcstore.dto.ProductDto;
 import app.mmcstore.entity.Bill;
 import app.mmcstore.entity.User;
 import app.mmcstore.services.BillService;
+import app.mmcstore.services.UserService;
 import app.mmcstore.start.App;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -91,10 +92,11 @@ public class CustomerMyOrderView implements Initializable {
 		BillService billService = new BillService();
 		
 		CustomerDashboardDto cddto = billService.getCustomerBillDashboardDetail(loggedUser.getCustomer().getCustomerId());
-		myOrdersTotalOrders.setText(String.valueOf(cddto.getTotalBill()));
-		myOrderPendingBills.setText(String.valueOf(cddto.getUnpaidBill()));
-		myOrderPaidBill.setText(String.valueOf(cddto.getPaidBill()));
-		
+		System.out.println("CustomerDashboardDto::"+cddto);
+		myOrdersTotalOrders.setText(String.valueOf(cddto.getTotalBill()==null ? 0 : cddto.getTotalBill()));
+		myOrderPendingBills.setText(String.valueOf(cddto.getUnpaidBill()==null ? 0 : cddto.getUnpaidBill()));
+		myOrderPaidBill.setText(String.valueOf(cddto.getPaidBill()==null ? 0 : cddto.getPaidBill()));
+		myOrderPendingAmt.setText(String.valueOf(cddto.getUnpaidAmount()==null ? 0.00 : cddto.getUnpaidAmount()));
 		List<Bill> bills = billService.getBillsByCustomerId(loggedUser.getCustomer().getCustomerId());
 
 		for (Bill bill : bills) {
@@ -128,12 +130,16 @@ public class CustomerMyOrderView implements Initializable {
 			alertDialog.close();
 		});
 		
+		UserService userService = new UserService();
+		
 		myOrderOkBtn.setOnAction(event -> {
 			
 			if(radioHBox.isVisible()) {
 				JFXRadioButton rb = (JFXRadioButton) payNowPayLaterToggleGroup.getSelectedToggle();
 				boolean isPaid = rb.getText().equals("Pay Later")  ? false : true; 
-				if(isPaid) {
+				Double existAmt = userService.getCustomerAccountBalance(loggedUser.getCustomer().getCustomerId());
+				Double billAmt = Double.parseDouble(myOrderTotalAmt.getText().split(" ")[1]);
+				if(isPaid && existAmt > billAmt) {
 					int indexCell = myOrderListView.getSelectionModel().getSelectedIndex();
 					Bill billl = myOrderListView.getSelectionModel().selectedItemProperty().get();
 					billl.setCustomer(loggedUser.getCustomer());
@@ -157,7 +163,13 @@ public class CustomerMyOrderView implements Initializable {
 						alertDialogBtn.getStyleClass().add("btn-danger");
 						alertDialog.show();
 					}
+					
 				}else {
+					alertDialogTitle.setText("Sorry.. Your account balance is lower than cart amount.");
+					alertDialog.setTransitionType(DialogTransition.CENTER);
+					alertDialogBtn.getStyleClass().remove("btn-info");
+					alertDialogBtn.getStyleClass().add("btn-danger");
+					alertDialog.show();
 					myOrderDetailDialog.close();
 				}
 			}else {

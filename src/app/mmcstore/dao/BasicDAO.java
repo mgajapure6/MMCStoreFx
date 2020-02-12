@@ -114,6 +114,27 @@ public abstract class BasicDAO<T> {
 		}
 		return list;
 	}
+	
+	public boolean executeUpdate(String query) throws Exception {
+		EntityManager em = getEntityManager();
+		try {
+			em.getTransaction().begin();
+			Query q = em.createNativeQuery(query);
+			int i = q.executeUpdate();
+			if(i>0) {
+				em.getTransaction().commit();
+				return true;
+			}else {
+				return false;
+			}
+		} catch (Exception e) {
+			em.getTransaction().rollback();
+			e.printStackTrace();
+			return false;
+		} finally {
+			em.close();
+		}
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<T> executeQuery(String query, T entity) throws Exception {

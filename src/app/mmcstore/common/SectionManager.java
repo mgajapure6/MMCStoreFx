@@ -32,23 +32,23 @@ public class SectionManager {
 		}
 	}
 
-	public static void save(Section section) {
-		try {
-			File file = new File("dashboard.properties");
-			Properties properties = new Properties();
-
-			FileInputStream inputStream = new FileInputStream(file);
-			properties.load(inputStream);
-
-			FileOutputStream outputStream = new FileOutputStream(file);
-
-			properties.setProperty("logged", String.valueOf(section.isLogged()));
-			properties.setProperty("userLogged", section.getUserLogged());
-			properties.store(outputStream, "Update Section");
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void save(Section section) {
+//		try {
+//			File file = new File("dashboard.properties");
+//			Properties properties = new Properties();
+//
+//			FileInputStream inputStream = new FileInputStream(file);
+//			properties.load(inputStream);
+//
+//			FileOutputStream outputStream = new FileOutputStream(file);
+//
+//			properties.setProperty("logged", String.valueOf(section.isLogged()));
+//			properties.setProperty("userLogged", section.getUserLogged());
+//			properties.store(outputStream, "Update Section");
+//
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 }

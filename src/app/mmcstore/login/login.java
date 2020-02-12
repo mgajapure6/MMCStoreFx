@@ -159,7 +159,7 @@ public class login implements Initializable {
 			Section section = new Section();
 			section.setLogged(true);
 			section.setUserLogged(this.username.getText());
-			SectionManager.save(section);
+			//SectionManager.save(section);
 			App.setUserDetail(user);
 			try {
 				if (user.getIsCustomer()) {

@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -20,8 +22,8 @@ public class Account {
 	@Column(nullable = false, length = 10)
 	private Double sum;
 
-	@ManyToOne
-	@JoinColumn(name = "customerId", nullable = false)
+	@OneToOne
+	@JoinColumn(name = "customerId")
 	private Customer customer;
 
 	public Account(Integer accountId, Double sum, Customer customer) {
@@ -61,7 +63,7 @@ public class Account {
 
 	@Override
 	public String toString() {
-		return "Account [accountId=" + accountId + ", sum=" + sum + ", customer=" + customer + "]";
+		return "Account [accountId=" + accountId + ", sum=" + sum + "]";
 	}
 
 }

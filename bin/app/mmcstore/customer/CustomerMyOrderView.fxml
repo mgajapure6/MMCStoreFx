@@ -103,7 +103,7 @@
 														<Label layoutX="10.0" layoutY="10.0" styleClass="h5" text="Pending Amount" />
 													</children>
 												</VBox>
-												<FontAwesomeIconView glyphName="INR" size="40" styleClass="text-warning" />
+												<FontAwesomeIconView glyphName="USD" size="40" styleClass="text-warning" />
 											</children>
 										</HBox>
 										<JFXProgressBar progress="0.73">
@@ -127,7 +127,7 @@
 														<Label layoutX="10.0" layoutY="10.0" styleClass="h5" text="Paid Bills" />
 													</children>
 												</VBox>
-												<FontAwesomeIconView glyphName="INR" size="40" styleClass="text-warning" />
+												<FontAwesomeIconView glyphName="USD" size="40" styleClass="text-warning" />
 											</children>
 										</HBox>
 										<JFXProgressBar progress="0.73">
@@ -159,10 +159,10 @@
 
 
 
-	<JFXDialog fx:id="alertDialog">
-		<JFXDialogLayout style="-fx-background-color:#fff">
+	<JFXDialog fx:id="alertDialog" prefWidth="700.0">
+		<JFXDialogLayout style="-fx-background-color:#fff" prefWidth="700.0">
 			<heading>
-				<Label fx:id="alertDialogTitle" prefHeight="38.0" prefWidth="400.0" text="">
+				<Label fx:id="alertDialogTitle" prefHeight="38.0" prefWidth="700.0" text="">
 					<styleClass>
 						<String fx:value="h4" />
 						<String fx:value="title" />
