@@ -114,7 +114,7 @@ public class BillService {
 		"join product d on (c.productId = d.productId) " + 
 		"where a.customerId =  " + customerId +
 		" and a.ISPAID > 0 )t";
-		
+	 	
 		
 //		
 //		String query = "select sum(totalBills) as totalBill, sum(paidBills) as paidBill,"
