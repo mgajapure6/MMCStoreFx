@@ -26,10 +26,4 @@ public class ProviderDaoTest {
 		assertTrue("is provider saved", isSaved);
 	}
 
-	@SuppressWarnings("unused")
-	@Test
-	public void updateProvider() throws Exception {
-		Provider provider = providerDao.find(1);
-	}
-
 }

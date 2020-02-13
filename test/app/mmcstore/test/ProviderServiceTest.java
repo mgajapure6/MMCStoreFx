@@ -31,7 +31,6 @@ public class ProviderServiceTest {
 	public void getProviderBillsById() {
 		List<ProviderBillDto> pbds = providerService.getProviderBillsById(1);
 		assertTrue("is greater than 0", pbds.size() > 0);
-		// assertThat(pbds, hasSize(0));
 		assertTrue("not empty", !pbds.isEmpty());
 	}
 

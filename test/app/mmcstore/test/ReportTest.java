@@ -17,15 +17,19 @@ import app.mmcstore.common.ITextTableGenerator;
 import app.mmcstore.common.PdfViewer;
 import app.mmcstore.provider.ProviderProductView;
 
+import org.junit.Before;
+import org.junit.Test;
+
 public class ReportTest {
 
-	public static void main(String[] args) {
+    @Test
+	public void testReport() {
 		File file = new File("C:\\Users\\Learn\\Desktop\\mgg-pics\\pdf\\pdf.pdf");
 		if (file != null) {
 			String savePath = file.getAbsolutePath();
 			// System.out.println(savePath);
 			String title = "MMC Store Products Report",
-					subTitle = "Provider : Mayur Gajapure" ;
+					subTitle = "Provider : MGG" ;
 			int colNum = 5;
 			List<List<String>> dataSet = new ArrayList<List<String>>();
 			String[] tableTitleList = { " Sr. No. ", " Product Name ", " Product Description ",
